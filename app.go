@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -159,6 +160,10 @@ func whoamiHandler(w http.ResponseWriter, req *http.Request) {
 
 	hostname, _ := os.Hostname()
 	_, _ = fmt.Fprintln(w, "Hostname:", hostname)
+
+	res, _ := http.Get("https://api.ipify.org")
+	publicip, _ := ioutil.ReadAll(res.Body)
+	_, _ = fmt.Fprintln(w, "Public IP:", string(publicip))
 
 	ifaces, _ := net.Interfaces()
 	for _, i := range ifaces {
